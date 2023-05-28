@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:vscode_flutter/src/domain/file_item.dart';
 import 'package:vscode_flutter/src/features/editor/editor_utils.dart';
 import 'package:vscode_flutter/src/features/editor/widgets/file_editor.dart';
+import 'package:vscode_flutter/src/features/editor/widgets/file_explorer.dart';
 import 'package:vscode_flutter/src/features/editor/widgets/file_name.dart';
 
 @RoutePage()
@@ -20,6 +21,7 @@ class EditorPage extends StatefulWidget {
 class _EditorPageState extends State<EditorPage> {
   FileItem? selectedFile;
   FileItem? fileItem;
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +33,7 @@ class _EditorPageState extends State<EditorPage> {
   void startReading() async {
     Directory directory = Directory(widget.directoryPath);
     FileItem fileItem = FileItem(directory: directory);
-    await EditorUtils.mapFileItems(fileItem);
+    EditorUtils.mapFileItems(fileItem);
     setState(() {
       this.fileItem = fileItem;
     });
@@ -50,17 +52,11 @@ class _EditorPageState extends State<EditorPage> {
                   ? const Center(
                       child: Text('Nothing to show'),
                     )
-                  : ListView.builder(
-                      itemBuilder: (context, index) => InkWell(
-                          onTap: () => setState(() {
-                                selectedFile = fileItem?.childItems?[index];
-                              }),
-                          child: FileName(
-                            fileItem:
-                                fileItem?.childItems?[index] ?? FileItem(),
-                          )),
-                      itemCount: fileItem?.childItems?.length,
-                    ),
+                  : FileExplorer(fileItem: fileItem!,onFileSelected: (file) {
+                      setState(() {
+                        selectedFile = file;
+                      });
+                    }),
             ),
             Expanded(
                 child: selectedFile != null

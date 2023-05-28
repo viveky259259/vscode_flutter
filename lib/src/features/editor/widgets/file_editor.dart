@@ -44,8 +44,18 @@ class _FileEditorState extends State<FileEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(child: Text(content)),
-    );
+    if (widget.file is FileItem) {
+      return Scaffold(
+        body: SingleChildScrollView(
+            child: Column(
+          children: [
+            Text(widget.file.file.uri.pathSegments.last),
+            Text(content),
+          ],
+        )),
+      );
+    } else {
+      return SizedBox();
+    }
   }
 }
