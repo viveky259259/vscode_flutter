@@ -14,8 +14,8 @@ class FileName extends StatelessWidget {
           Image.asset(
             'assets/logo/dart_logo.png',
             fit: BoxFit.fill,
-            height: 24,
-            width: 24,
+            height: 16,
+            width: 16,
           ),
           const SizedBox(
             width: 8,
@@ -24,7 +24,15 @@ class FileName extends StatelessWidget {
         ],
       );
     } else if (fileItem.directory != null) {
-      return Text(fileItem.directory!.path.split('/').last);
+      return Row(
+        children: [
+          const Icon(Icons.arrow_right),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(fileItem.directory!.path.split('/').last),
+        ],
+      );
     }
     return const Text('Not able to indentify file');
   }

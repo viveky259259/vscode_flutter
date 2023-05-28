@@ -1,11 +1,11 @@
 import 'dart:io';
 
 class FileItem {
-  FileItem({this.file, this.directory, this.childItems});
+  FileItem({this.file, this.directory, this.childItems, this.isRoot = false});
   File? file;
   Directory? directory;
   List<FileItem>? childItems;
-
+  bool isRoot;
   bool get isFile => file != null;
   bool get isDirectory => directory != null;
   void addChildern(FileItem fileItem) {

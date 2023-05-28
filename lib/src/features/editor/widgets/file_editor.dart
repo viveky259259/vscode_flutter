@@ -27,11 +27,11 @@ class _FileEditorState extends State<FileEditor> {
     if (widget.file is FileItem) {
       final tempFile = widget.file as FileItem;
       if (tempFile.isFile) {
-        if (tempFile.file!.uri.pathSegments.last.contains('.dart')) {
+        try {
           content = utf8.decode(tempFile.file!.readAsBytesSync());
-        } else {
+        } catch (e) {
           content =
-              'This is not a dart file: ${tempFile.file!.uri.pathSegments.last}}';
+              'This is not a readable file: ${tempFile.file!.uri.pathSegments.last}}';
         }
       } else if (tempFile.isDirectory) {
         content = 'This is a directory';
@@ -48,6 +48,7 @@ class _FileEditorState extends State<FileEditor> {
       return Scaffold(
         body: SingleChildScrollView(
             child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(widget.file.file.uri.pathSegments.last),
             Text(content),

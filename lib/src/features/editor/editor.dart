@@ -21,7 +21,7 @@ class EditorPage extends StatefulWidget {
 class _EditorPageState extends State<EditorPage> {
   FileItem? selectedFile;
   FileItem? fileItem;
-
+  bool reading = false;
   @override
   void initState() {
     super.initState();
@@ -32,10 +32,12 @@ class _EditorPageState extends State<EditorPage> {
 
   void startReading() async {
     Directory directory = Directory(widget.directoryPath);
-    FileItem fileItem = FileItem(directory: directory);
+    FileItem fileItem = FileItem(directory: directory, isRoot: true);
+
     EditorUtils.mapFileItems(fileItem);
     setState(() {
       this.fileItem = fileItem;
+      this.reading = false;
     });
   }
 
@@ -45,27 +47,36 @@ class _EditorPageState extends State<EditorPage> {
         appBar: AppBar(
           title: const Text('Editor'),
         ),
-        body: Row(
-          children: [
-            Expanded(
-              child: fileItem == null
-                  ? const Center(
-                      child: Text('Nothing to show'),
-                    )
-                  : FileExplorer(fileItem: fileItem!,onFileSelected: (file) {
-                      setState(() {
-                        selectedFile = file;
-                      });
-                    }),
-            ),
-            Expanded(
-                child: selectedFile != null
-                    ? FileEditor(
-                        file: selectedFile,
-                        key: ValueKey(selectedFile.toString()),
-                      )
-                    : const Text('Select a file to edit'))
-          ],
-        ));
+        body: reading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: fileItem == null
+                        ? const Center(
+                            child: Text('Nothing to show'),
+                          )
+                        : FileExplorer(
+                            key: ValueKey(fileItem.toString()),
+                            fileItem: fileItem!,
+                            onFileSelected: (file) {
+                              setState(() {
+                                selectedFile = file;
+                              });
+                            }),
+                  ),
+                  Expanded(
+                      flex: 3,
+                      child: selectedFile != null
+                          ? FileEditor(
+                              file: selectedFile,
+                              key: ValueKey(selectedFile.toString()),
+                            )
+                          : const Text('Select a file to edit'))
+                ],
+              ));
   }
 }

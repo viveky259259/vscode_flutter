@@ -10,14 +10,15 @@ class FileExplorer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!fileItem.isDirectory) return SizedBox();
-    return Column(
+    Widget widget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         FileName(fileItem: fileItem),
         if (fileItem.childItems != null && fileItem.childItems!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
+            child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
@@ -31,9 +32,18 @@ class FileExplorer extends StatelessWidget {
                     child: FileName(fileItem: fileItem.childItems![index]));
               },
               itemCount: fileItem.childItems!.length,
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 4,
+              ),
             ),
           ),
       ],
     );
+    if (fileItem.isRoot) {
+      return SingleChildScrollView(
+        child: widget,
+      );
+    }
+    return widget;
   }
 }
