@@ -34,7 +34,7 @@ class _EditorPageState extends State<EditorPage> {
     Directory directory = Directory(widget.directoryPath);
     FileItem fileItem = FileItem(directory: directory, isRoot: true);
 
-    EditorUtils.mapFileItems(fileItem);
+    await EditorUtils().mapFileItems(fileItem);
     setState(() {
       this.fileItem = fileItem;
       this.reading = false;
