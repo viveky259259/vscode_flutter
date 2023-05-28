@@ -8,7 +8,7 @@ class FileName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (fileItem.file != null) {
-      return Text(fileItem.file!.path);
+      return Text(fileItem.file!.uri.pathSegments.last);
     } else if (fileItem.directory != null) {
       return Text(fileItem.directory!.path);
     }

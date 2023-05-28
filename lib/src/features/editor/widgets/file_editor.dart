@@ -1,11 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vscode_flutter/src/domain/file_item.dart';
 
 @RoutePage()
@@ -32,7 +27,12 @@ class _FileEditorState extends State<FileEditor> {
     if (widget.file is FileItem) {
       final tempFile = widget.file as FileItem;
       if (tempFile.isFile) {
-        content = utf8.decode(tempFile.file!.readAsBytesSync());
+        if (tempFile.file!.uri.pathSegments.last.contains('.dart')) {
+          content = utf8.decode(tempFile.file!.readAsBytesSync());
+        } else {
+          content =
+              'This is not a dart file: ${tempFile.file!.uri.pathSegments.last}}';
+        }
       } else if (tempFile.isDirectory) {
         content = 'This is a directory';
       } else {
